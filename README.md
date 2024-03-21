@@ -1,0 +1,1 @@
+# bd-06-gp-pokedex
