@@ -62,9 +62,11 @@ func commandExit() error {
 }
 
 func commandPageNext() error {
+	getLocations()
 	return nil
 }
 
 func commandPagePrev() error {
+	getLocations()
 	return nil
 }
