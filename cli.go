@@ -62,11 +62,17 @@ func commandExit() error {
 }
 
 func commandPageNext() error {
-	getLocations()
+	locations := getLocationsNext()
+	for _, location := range locations.Results {
+		fmt.Printf("%s\n", location.Name)
+	}
 	return nil
 }
 
 func commandPagePrev() error {
-	getLocations()
+	locations := getLocationsPrev()
+	for _, location := range locations.Results {
+		fmt.Printf("%s\n", location.Name)
+	}
 	return nil
 }
