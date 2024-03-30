@@ -36,6 +36,17 @@ func getCommandStruct() map[string]cliCommand {
 	}
 }
 
+func parseCommand(cmd string) error {
+	structCommand := getCommandStruct()
+	cli, ok := structCommand[cmd]
+	if !ok {
+		fmt.Printf("Invalid command: %s\nUse 'help' to see the supported commands.\n", cmd)
+		return nil
+	} else {
+		return cli.callback()
+	}
+}
+
 func commandHelp() error {
 	fmt.Print("\nWelcome to the Pokedex!\nUsage:\n")
 	structCommand := getCommandStruct()
@@ -56,15 +67,4 @@ func commandPageNext() error {
 
 func commandPagePrev() error {
 	return nil
-}
-
-func parseCommand(cmd string) error {
-	structCommand := getCommandStruct()
-	cli, ok := structCommand[cmd]
-	if !ok {
-		fmt.Printf("Invalid command: %s\nUse 'help' to see the supported commands.\n", cmd)
-		return nil
-	} else {
-		return cli.callback()
-	}
 }
