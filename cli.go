@@ -23,6 +23,16 @@ func getCommandStruct() map[string]cliCommand {
 			description: "Exit the Pokedex",
 			callback:    commandExit,
 		},
+		"map": {
+			name:        "map",
+			description: "Display next page of the list of locations",
+			callback:    commandPageNext,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Display previous page of the list of locations",
+			callback:    commandPagePrev,
+		},
 	}
 }
 
@@ -38,6 +48,14 @@ func commandHelp() error {
 
 func commandExit() error {
 	return errors.New("exit")
+}
+
+func commandPageNext() error {
+	return nil
+}
+
+func commandPagePrev() error {
+	return nil
 }
 
 func parseCommand(cmd string) error {
