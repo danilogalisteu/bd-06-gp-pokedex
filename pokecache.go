@@ -17,7 +17,7 @@ type Cache struct {
 
 func (c Cache) Add(key string, val []byte) {
 	c.lock.Lock()
-	c.cache[key] = cacheEntry{time.Now(), val}
+	c.cache[key] = cacheEntry{createdAt: time.Now(), val: val}
 	c.lock.Unlock()
 }
 
@@ -29,4 +29,17 @@ func (c Cache) Get(key string) ([]byte, bool) {
 		return nil, false
 	}
 	return entry.val, true
+}
+
+func (c Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	for now := range ticker.C {
+		c.lock.Lock()
+		for key, item := range c.cache {
+			if now.Sub(item.createdAt) > interval {
+				delete(c.cache, key)
+			}
+		}
+		c.lock.Unlock()
+	}
 }
