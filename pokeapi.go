@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"io"
 	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
 )
 
 type PokeLocations struct {
