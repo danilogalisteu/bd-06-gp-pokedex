@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 type PokeLocations struct {
@@ -37,6 +38,7 @@ func getUrl(url string) []byte {
 }
 
 var locations = PokeLocations{}
+var cache = NewCache(5 * time.Minute)
 
 func getLocationsNext() PokeLocations {
 	urlLocation := "https://pokeapi.co/api/v2/location-area/"
@@ -44,7 +46,12 @@ func getLocationsNext() PokeLocations {
 		urlLocation = locations.Next
 	}
 
-	content := getUrl(urlLocation)
+	if _, ok := cache.Get(urlLocation); !ok {
+		content := getUrl(urlLocation)
+		cache.Add(urlLocation, content)
+	}
+	content, _ := cache.Get(urlLocation)
+
 	err := json.Unmarshal(content, &locations)
 	if err != nil {
 		fmt.Println(err)
@@ -60,7 +67,12 @@ func getLocationsPrev() PokeLocations {
 	}
 	urlLocation := *locations.Previous
 
-	content := getUrl(urlLocation)
+	if _, ok := cache.Get(urlLocation); !ok {
+		content := getUrl(urlLocation)
+		cache.Add(urlLocation, content)
+	}
+	content, _ := cache.Get(urlLocation)
+
 	err := json.Unmarshal(content, &locations)
 	if err != nil {
 		fmt.Println(err)
