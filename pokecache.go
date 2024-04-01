@@ -43,3 +43,9 @@ func (c Cache) reapLoop(interval time.Duration) {
 		c.lock.Unlock()
 	}
 }
+
+func NewCache(interval time.Duration) Cache {
+	c := Cache{cache: map[string]cacheEntry{}, lock: &sync.Mutex{}}
+	go c.reapLoop(interval)
+	return c
+}
