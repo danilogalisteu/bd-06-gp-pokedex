@@ -1,4 +1,4 @@
-package main
+package pokeapi
 
 import (
 	"encoding/json"
@@ -94,7 +94,7 @@ var locations = PokeLocations{}
 var encounters = PokeEncounters{}
 var cache = NewCache(5 * time.Minute)
 
-func getLocationsNext() PokeLocations {
+func GetLocationsNext() PokeLocations {
 	urlLocation := "https://pokeapi.co/api/v2/location-area/"
 	if locations.Next != "" {
 		urlLocation = locations.Next
@@ -114,7 +114,7 @@ func getLocationsNext() PokeLocations {
 	return locations
 }
 
-func getLocationsPrev() PokeLocations {
+func GetLocationsPrev() PokeLocations {
 	if locations.Previous == nil {
 		fmt.Println("No previous page of results")
 		return locations
@@ -135,7 +135,7 @@ func getLocationsPrev() PokeLocations {
 	return locations
 }
 
-func exploreLocation(id string) (PokeEncounters, bool) {
+func ExploreLocation(id string) (PokeEncounters, bool) {
 	urlLocation := ""
 	for _, res := range locations.Results {
 		if id == res.Name {

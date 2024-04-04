@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"internal/pokeapi"
 	"strings"
 )
 
@@ -69,7 +70,7 @@ func commandExit(string) error {
 }
 
 func commandPageNext(string) error {
-	locations := getLocationsNext()
+	locations := pokeapi.GetLocationsNext()
 	for _, location := range locations.Results {
 		fmt.Printf("%s\n", location.Name)
 	}
@@ -77,7 +78,7 @@ func commandPageNext(string) error {
 }
 
 func commandPagePrev(string) error {
-	locations := getLocationsPrev()
+	locations := pokeapi.GetLocationsPrev()
 	for _, location := range locations.Results {
 		fmt.Printf("%s\n", location.Name)
 	}
@@ -90,7 +91,7 @@ func commandExplore(id string) error {
 		return nil
 	}
 
-	encounters, ok := exploreLocation(id)
+	encounters, ok := pokeapi.ExploreLocation(id)
 	if !ok {
 		fmt.Print("Given location not found in the current list:\n" + id + "\n")
 		return nil
