@@ -9,6 +9,7 @@ import (
 var cache = NewCache(5 * time.Minute)
 var locations = PokeLocations{}
 var encounters = PokeEncounters{}
+var info = PokeInfo{}
 
 func GetLocationsNext() PokeLocations {
 	urlLocation := "https://pokeapi.co/api/v2/location-area/"
@@ -76,4 +77,31 @@ func ExploreLocation(id string) (PokeEncounters, bool) {
 	}
 
 	return encounters, true
+}
+
+func CatchPokemon(id string) (PokeInfo, bool) {
+	urlLocation := ""
+	for _, encounter := range encounters.PokemonEncounters {
+		if id == encounter.Pokemon.Name {
+			urlLocation = encounter.Pokemon.URL
+			break
+		}
+	}
+
+	if urlLocation == "" {
+		return info, false
+	}
+
+	if _, ok := cache.Get(urlLocation); !ok {
+		content := getUrl(urlLocation)
+		cache.Add(urlLocation, content)
+	}
+	content, _ := cache.Get(urlLocation)
+
+	err := json.Unmarshal(content, &info)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return info, true
 }

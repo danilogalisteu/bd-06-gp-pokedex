@@ -37,8 +37,13 @@ func getCommandStruct() map[string]cliCommand {
 		},
 		"explore": {
 			name:        "explore",
-			description: "Show Pokemon found in the given location",
+			description: "Show all Pokemon found in the given location",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Try to catch the given Pokemon",
+			callback:    commandCatch,
 		},
 	}
 }
@@ -93,7 +98,7 @@ func commandExplore(id string) error {
 
 	encounters, ok := pokeapi.ExploreLocation(id)
 	if !ok {
-		fmt.Print("Given location not found in the current list:\n" + id + "\n")
+		fmt.Print("Given location not found in the current list: " + id + "\n")
 		return nil
 	}
 
@@ -101,5 +106,22 @@ func commandExplore(id string) error {
 	for _, encounter := range encounters.PokemonEncounters {
 		fmt.Printf(" - %s\n", encounter.Pokemon.Name)
 	}
+	return nil
+}
+
+func commandCatch(id string) error {
+	if id == "" {
+		fmt.Print("No Pokemon name was provided\n")
+		return nil
+	}
+
+	info, ok := pokeapi.CatchPokemon(id)
+	if !ok {
+		fmt.Print("Given Pokemon not found in the current location: " + id + "\n")
+		return nil
+	}
+
+	fmt.Printf("Throwing a Pokeball at %s...\nbase exp %v\n", id, info.BaseExperience)
+
 	return nil
 }
