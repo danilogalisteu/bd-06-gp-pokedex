@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"internal/pokeapi"
 	"strings"
+	"math/rand"
 )
 
 type cliCommand struct {
@@ -12,6 +13,8 @@ type cliCommand struct {
 	description string
 	callback    func(string) error
 }
+
+var pokedex = make(map[string]pokeapi.PokeInfo)
 
 func getCommandStruct() map[string]cliCommand {
 	return map[string]cliCommand{
@@ -121,7 +124,15 @@ func commandCatch(id string) error {
 		return nil
 	}
 
-	fmt.Printf("Throwing a Pokeball at %s...\nbase exp %v\n", id, info.BaseExperience)
+	fmt.Printf("Throwing a Pokeball at %s...\n", id)
+
+	if rand.Intn(1000) < info.BaseExperience {
+		fmt.Printf("%s escaped!\n", id)
+		return nil
+	}
+
+	fmt.Printf("%s was caught!\n", id)
+	pokedex[id] = info
 
 	return nil
 }
