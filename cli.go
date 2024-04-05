@@ -48,6 +48,11 @@ func getCommandStruct() map[string]cliCommand {
 			description: "Try to catch the given Pokemon",
 			callback:    commandCatch,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "See details of the given Pokemon, if it was caught",
+			callback:    commandInspect,
+		},
 	}
 }
 
@@ -133,6 +138,33 @@ func commandCatch(id string) error {
 
 	fmt.Printf("%s was caught!\n", id)
 	pokedex[id] = info
+
+	return nil
+}
+
+func commandInspect(id string) error {
+	if id == "" {
+		fmt.Print("No Pokemon name was provided\n")
+		return nil
+	}
+
+	info, ok := pokedex[id]
+	if !ok {
+		fmt.Printf("Given Pokemon is not in the Pokedex: %s\n", id)
+		return nil
+	}
+
+	fmt.Printf("Name: %s\n", id)
+	fmt.Printf("Height: %d\n", info.Height)
+	fmt.Printf("Weight: %d\n", info.Weight)
+	fmt.Printf("Stats:\n")
+	for _, stat := range info.Stats {
+		fmt.Printf("  -%s: %d\n", stat.Stat.Name, stat.BaseStat)
+	}
+	fmt.Printf("Types:\n")
+	for _, tp := range info.Types {
+		fmt.Printf("  -%s\n", tp.Type.Name)
+	}
 
 	return nil
 }
