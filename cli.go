@@ -53,6 +53,11 @@ func getCommandStruct() map[string]cliCommand {
 			description: "See details of the given Pokemon, if it was caught",
 			callback:    commandInspect,
 		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "See details of the given Pokemon, if it was caught",
+			callback:    commandInspect,
+		},
 	}
 }
 
@@ -136,7 +141,7 @@ func commandCatch(id string) error {
 		return nil
 	}
 
-	fmt.Printf("%s was caught!\n", id)
+	fmt.Printf("%s was caught!\nYou may now inspect it with the inspect command.\n", id)
 	pokedex[id] = info
 
 	return nil
