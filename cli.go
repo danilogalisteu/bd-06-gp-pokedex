@@ -55,8 +55,8 @@ func getCommandStruct() map[string]cliCommand {
 		},
 		"pokedex": {
 			name:        "pokedex",
-			description: "See details of the given Pokemon, if it was caught",
-			callback:    commandInspect,
+			description: "See a list of the Pokemon caught",
+			callback:    commandPokedex,
 		},
 	}
 }
@@ -171,5 +171,13 @@ func commandInspect(id string) error {
 		fmt.Printf("  -%s\n", tp.Type.Name)
 	}
 
+	return nil
+}
+
+func commandPokedex(string) error {
+	fmt.Print("Your Pokedex:\n")
+	for _, info := range pokedex {
+		fmt.Printf(" - %s\n", info.Name)
+	}
 	return nil
 }
